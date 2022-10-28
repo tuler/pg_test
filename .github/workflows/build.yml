@@ -18,7 +18,7 @@ jobs:
         ports:
           - 5434:5432
     steps:
-      - run: sudo apt update && sudo apt upgrade -y
+      - run: sudo apt update && sudo apt install -y protobuf-compiler libprotobuf-dev
       - run: psql -c 'CREATE TABLE test (id serial PRIMARY KEY);' -d test_db -h 127.0.0.1 -p 5434 -w
         env:
           PGUSER: postgres
