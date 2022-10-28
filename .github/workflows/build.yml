@@ -1,0 +1,24 @@
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+name: Build
+on: [push]
+jobs:
+  test:
+    runs-on: ubuntu-22.04
+    services:
+      db:
+        image: postgres:13
+        env:
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: test_db
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5434:5432
+    steps:
+      - run: psql -c 'CREATE TABLE test (id serial PRIMARY KEY);' -d test_db -h localhost -p 5434 -w
+        env:
+          PGUSER: postgres
+          PGPASSWORD: password
